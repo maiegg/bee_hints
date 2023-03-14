@@ -1,6 +1,7 @@
 import hunspell
 from itertools import combinations_with_replacement, permutations
-from PyDictionary import PyDictionary
+# from PyDictionary import PyDictionary
+import random
 
 h = hunspell.Hunspell()
 # get today's letters
@@ -33,14 +34,22 @@ words.sort()
 # Call PyDictionary class
 # dc = PyDictionary()
 # tried this; too many bugs in the dictionary.
-# missing common words like "that" or "they" and containing many entries for proper nouns 
-# still some weird behavior even with hunspell, for example: "theed" is not a word but hunspell says it is 
+# missing common words like "that" or "they" and containing many entries for proper nouns
+# still some weird behavior even with hunspell, for example: "theed" is not a word but hunspell says it is
 """
 words = [word for word in words if word[0] == start]
-print(f'{len(words)}, {length}-letter words starting with {start.upper()}:')
+print(f'{len(words)}, {length}-letter word(s) starting with {start.upper()}:')
 
 for word in words:
-    print(word)
+    idx_to_reveal = random.sample(range(1, len(word)), round(len(word)/2 - 1))
+    modified_word = []
 
+    for i in range(len(word)):
+        if i == 0 or i in idx_to_reveal:
+            modified_word.append(word[i])
+        else:
+            modified_word.append('_')
+    print(''.join(modified_word))
 
-
+#
+#
