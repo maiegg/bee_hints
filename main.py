@@ -1,16 +1,43 @@
 import hunspell
 from itertools import combinations_with_replacement, permutations
-# from PyDictionary import PyDictionary
 import random
 
 h = hunspell.Hunspell()
 # get today's letters
 letters = input("What are today's letters? ").lower()
+while (len(letters) != 7) or (len(letters) != len(set(letters))) or (not letters.isalpha()):
+    print('Puzzle must contain 7 distinct letters.')
+    letters = input("What are today's letters? ").lower()
+
 central = input("Central letter: ").lower()
+while (len(central) != 1) or (not central.isalpha()):
+    print('Enter only a single letter.')
+    central = input("Central letter: ").lower()
+while central not in letters:
+    print('Central letter must be one of the 7 total letters.')
+    central = input("Central letter: ").lower()
+
 start = input('First letter: ').lower()
+while (len(start) != 1) or (not start.isalpha()):
+    print('Enter only a single letter.')
+    start = input("First letter: ").lower()
+while start not in letters:
+    print('First letter must be one of the 7 total letters.')
+    start = input('First letter: ').lower()
+
 length = input("Word length: ")
-# good checks on input: num letters should be 7, central must be in letters, length must be a number leq 7
-# letters must be all alpha, no spaces or numbers or punctuation
+while (not length.isnumeric()):
+    print('Enter only a single number.')
+    length = input("Word length: ")
+while int(length) <= 4:
+    print('Enter a number greater than or equal to 4.')
+    length = input("Word length: ")
+
+difficulty = input('Hard or easy? ').lower()
+while difficulty not in ['hard','easy']:
+    difficulty = input('Hard or easy? ').lower()
+
+print('Inputs accepted.')
 
 # find all combinations of length `length`
 lettergroups = list(combinations_with_replacement(list(letters), int(length)))
@@ -40,16 +67,17 @@ words.sort()
 words = [word for word in words if word[0] == start]
 print(f'{len(words)}, {length}-letter word(s) starting with {start.upper()}:')
 
-for word in words:
-    idx_to_reveal = random.sample(range(1, len(word)), round(len(word)/2 - 1))
-    modified_word = []
+if difficulty == 'hard':
+    for word in words:
+        idx_to_reveal = random.sample(range(1, len(word)), round(len(word)/2 - 1))
+        modified_word = []
 
-    for i in range(len(word)):
-        if i == 0 or i in idx_to_reveal:
-            modified_word.append(word[i])
-        else:
-            modified_word.append('_')
-    print(''.join(modified_word))
-
-#
-#
+        for i in range(len(word)):
+            if i == 0 or i in idx_to_reveal:
+                modified_word.append(word[i])
+            else:
+                modified_word.append('_')
+        print(''.join(modified_word))
+else:
+    for word in words:
+        print(word)
